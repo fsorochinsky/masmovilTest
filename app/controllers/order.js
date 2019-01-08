@@ -28,10 +28,10 @@ function create(req) {
 
     return orderItemValidation(order, phones);
   }).then(() => {
-    // maybe will need to move this functionality to phone controller and use like "get phone"
+    // maybe will need to move this functionality to phone controller and use by axios (HTTP request) like "get phone"
     return models.phone.updateItemsCount(order);
   }).then(()=>{
-    return models.order.createOrder(order)
+    return models.order.createOrder(order);
   });
 }
 
@@ -39,6 +39,7 @@ module.exports = {
   create: create
 };
 
+// can be used some validation package
 function baseOrderValidation(order) {
   let errors = [];
 

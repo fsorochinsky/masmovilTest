@@ -16,7 +16,8 @@ module.exports = (sequelize, DataTypes) => {
 
   Phone.updateItemsCount = function(order){
     return sequelize.transaction((t) => {
-      // can be improved depends DB and request counts
+      // can be improved depends DB and request counts;
+      // create one transaction for all user items and revert changes if some of item count is 0 (update by another user)
       return promise.map(order, (item) => {
         return Phone.update(
           {count: sequelize.literal('count - ' + item.count)},
@@ -29,7 +30,7 @@ module.exports = (sequelize, DataTypes) => {
             },
             transaction: t
           }
-        )
+        );
       }, {concurrency: 3}).then((result)=>{
         let errors = [];
 
@@ -38,7 +39,7 @@ module.exports = (sequelize, DataTypes) => {
             errors.push({
               itemId: order[i].itemId,
               message: 'wrong item count. item has been updated'
-            })
+            });
           }
         });
 
@@ -46,7 +47,7 @@ module.exports = (sequelize, DataTypes) => {
           return promise.reject({messages:errors});
         }
 
-        return promise.resolve()
+        return promise.resolve();
       })
     });
   };
