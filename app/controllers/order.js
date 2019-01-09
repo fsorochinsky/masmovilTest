@@ -2,6 +2,8 @@ const models = require('../models');
 const phoneServerUrl = require('../config/config').phoneServerUrl;
 const axios = require('axios');
 const promise = require('bluebird');
+const validation = require('../validations/order');
+const userCtrl = require('./user');
 
 /**
  *
@@ -20,93 +22,77 @@ const promise = require('bluebird');
 function create(req) {
   let order = req.body;
   let phones;
+  let user;
 
-  return baseOrderValidation(order).then(() => {
-    return axios.get(phoneServerUrl + '/phones')
+  return validation.baseOrderValidation(order).then(() => {
+    return axios.get(phoneServerUrl + '/phones');
   }).then((response) => {
     phones = response.data;
 
-    return orderItemValidation(order, phones);
+    return userCtrl.getUser({body: {email: 'test@test.net'}});
+  }).then((response) => {
+    user = response;
+
+    return validation.orderItemValidation(order, phones);
   }).then(() => {
     // maybe will need to move this functionality to phone controller and use by axios (HTTP request) like "get phone"
     return models.phone.updateItemsCount(order);
-  }).then(()=>{
+  }).then(() => {
+    order.userId = user.id;
+
     return models.order.createOrder(order);
+  }).then((result) => {
+    logOrder(result);
+
+    return promise.resolve();
+  })
+}
+
+function list(req) {
+  let phones;
+
+  return axios.get(phoneServerUrl + '/phones').then((response) => {
+    phones = response.data;
+
+    return models.order.findAll({
+      include: [{
+        model: models.user
+      }, {
+        model: models.orderItem
+      }]
+    });
+  }).then((response) => {
+    return promise.resolve(attachPhones(response, phones));
   });
 }
 
 module.exports = {
-  create: create
+  create: create,
+  list: list
 };
 
-// can be used some validation package
-function baseOrderValidation(order) {
-  let errors = [];
+function attachPhones(orders, phones) {
+  let objectPhones = phones.reduce((obj, phone) => {
+    obj[phone.id] = phone;
 
-  if (!order || !order.length) {
-    return promise.reject({
-      messages: [{
-        itemId: '',
-        message: 'order is empty'
-      }]
+    return obj;
+  }, {});
+
+  orders.forEach((order) => {
+    order.orderItems.forEach((item, i) => {
+      item = item.dataValues;
+      item.phone = objectPhones[item.phoneId];
     });
-  }
-
-  order.forEach((orderItem) => {
-    if (!orderItem.itemId || !orderItem.count) {
-      errors.push({
-        itemId: orderItem.itemId || '',
-        message: 'wrong item or count'
-      });
-    }
   });
 
-  if (errors.length) {
-    return promise.reject({
-      messages: errors
-    });
-  }
-
-  return promise.resolve();
+  return orders;
 }
 
-function orderItemValidation(order, phones) {
-  let phoneObj = {};
-  let errors = [];
-
-  phones.forEach((phone) => {
-    phoneObj[phone.id] = phone;
+function logOrder(order) {
+  // get order item values instead model
+  order.orderItems.forEach((item, i) => {
+    order.orderItems[i] = item.values;
   });
 
-  order.forEach((orderItem) => {
-    let error = isValidItem(orderItem, phoneObj);
-
-    orderItem.price = phoneObj[orderItem.itemId].price;
-
-    !!error && errors.push(error);
-  });
-
-  if (errors.length) {
-    return promise.reject({
-      messages: errors
-    });
-  }
-
-  return promise.resolve();
-}
-
-function isValidItem(orderItem, phoneObj) {
-  let phone = phoneObj[orderItem.itemId];
-  let error = {};
-  orderItem.count = orderItem.count|0;
-
-  if (!phone) {
-    error.itemId = orderItem.itemId;
-    error.message = 'wrong item';
-  } else if (!orderItem.count || phone.count < orderItem.count) {
-    error.itemId = orderItem.itemId;
-    error.message = 'wrong item count. max item count is ' + phone.count;
-  }
-
-  return error.itemId ? error : null;
+  console.log(order);
 }

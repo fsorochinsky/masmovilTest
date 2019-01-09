@@ -4,12 +4,14 @@ module.exports = (sequelize, DataTypes) => {
   var Order = sequelize.define('order', {
     status: DataTypes.STRING(10),
     totalPrice: DataTypes.FLOAT,
+    userId: DataTypes.INTEGER
   }, {
     underscored: false
   });
 
   Order.associate = function (models) {
     models.order.hasMany(models.orderItem);
+    models.order.belongsTo(models.user);
   };
 
   Order.createOrder = function (order) {
@@ -18,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
     }, 0);
     let createdOrder;
 
-    return Order.create({status: 'success', totalPrice: totalPrice}).then((orderModel) => {
+    return Order.create({status: 'success', totalPrice: totalPrice, userId: order.userId}).then((orderModel) => {
       createdOrder = orderModel.dataValues;
 
       order.forEach((row) => {
