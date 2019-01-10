@@ -15,7 +15,10 @@ const {
   wrongItemCountErrorResponse,
   updatedRowsResponse,
   createdOrderResponse,
-  createdOrderItemsResponse
+  createdOrderItemsResponse,
+  orderList,
+  foundOrder,
+  user
 } = require('../testData/order');
 
 
@@ -23,6 +26,8 @@ describe('check create order', () => {
   let stubs;
 
   before(function () {
+    const originCreateOrderFn = models.order.createOrder;
+
     stubs = [
       sinon.stub(models.phone, 'updateItemsCount').callsFake(()=>{
         return Promise.resolve(updatedRowsResponse);
@@ -32,6 +37,20 @@ describe('check create order', () => {
       }),
       sinon.stub(models.orderItem, 'bulkCreate').callsFake(()=>{
         return Promise.resolve(createdOrderItemsResponse);
+      }),
+      sinon.stub(models.user, 'findOne').callsFake(()=>{
+        return Promise.resolve(user);
+      }),
+      sinon.stub(models.order, 'createOrder').callsFake((order, userId)=>{
+        let orderWithItems;
+
+        return originCreateOrderFn(order, userId).then((response)=>{
+          orderWithItems = response;
+
+          return expect(orderWithItems).to.deep.equal(createdOrderWithItemsResponse);
+        }).then(()=>{
+          return Promise.resolve(orderWithItems);
+        })
       })
     ];
 
@@ -54,8 +73,8 @@ describe('check create order', () => {
 
 
   it('should return created order with items', () => {
-    return orderCtrl.create(req).then((orderWithItems)=>{
-      return expect(orderWithItems).to.deep.equal(createdOrderWithItemsResponse);
+    return orderCtrl.create(req).then((empty)=>{
+      return expect(empty).to.be.undefined;
     })
   });
 
@@ -74,4 +93,41 @@ describe('check create order', () => {
       return expect(err).to.deep.equal(wrongItemCountErrorResponse);
     })
   });
+});
+
+
+describe('get orders', () => {
+  let stubs;
+
+  before(function () {
+    stubs = [
+      sinon.stub(models.order, 'findAll').callsFake(()=>{
+        return Promise.resolve(foundOrder);
+      })
+    ];
+
+    moxios.stubRequest(phoneServerUrl + '/phones', {
+      status: 200,
+      response: phoneList
+    });
+
+    moxios.install()
+  });
+
+  after(function () {
+    stubs.forEach((stub)=>{
+      stub.restore();
+    });
+
+    moxios.uninstall()
+  });
+
+
+  it('should return order list with user and items', () => {
+    return orderCtrl.list(req).then((orders)=>{
+      console.log(phoneList)
+      return expect(orders).to.deep.equal(orderList);
+    })
+  });
+
 });

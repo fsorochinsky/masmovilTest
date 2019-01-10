@@ -38,9 +38,7 @@ function create(req) {
     // maybe will need to move this functionality to phone controller and use by axios (HTTP request) like "get phone"
     return models.phone.updateItemsCount(order);
   }).then(() => {
-    order.userId = user.id;
-
-    return models.order.createOrder(order);
+    return models.order.createOrder(order, user.id);
   }).then((result) => {
     logOrder(result);
 
@@ -80,7 +78,6 @@ function attachPhones(orders, phones) {
 
   orders.forEach((order) => {
     order.orderItems.forEach((item, i) => {
-      item = item.dataValues;
       item.phone = objectPhones[item.phoneId];
     });
   });
@@ -91,7 +88,7 @@ function attachPhones(orders, phones) {
 function logOrder(order) {
   // get order item values instead model
   order.orderItems.forEach((item, i) => {
-    order.orderItems[i] = item.values;
+    order.orderItems[i] = item.dataValues;
   });
 
   console.log(order);

@@ -14,13 +14,13 @@ module.exports = (sequelize, DataTypes) => {
     models.order.belongsTo(models.user);
   };
 
-  Order.createOrder = function (order) {
+  Order.createOrder = function (order, userId) {
     let totalPrice = order.reduce((summ, item) => {
       return summ + item.count * item.price;
     }, 0);
     let createdOrder;
 
-    return Order.create({status: 'success', totalPrice: totalPrice, userId: order.userId}).then((orderModel) => {
+    return Order.create({status: 'success', totalPrice: totalPrice, userId: userId}).then((orderModel) => {
       createdOrder = orderModel.dataValues;
 
       order.forEach((row) => {
