@@ -19,49 +19,38 @@ const userCtrl = require('./user');
  * ]
  *
  */
-function create(req) {
+async function create(req) {
   let order = req.body;
-  let phones;
-  let user;
 
-  return validation.baseOrderValidation(order).then(() => {
-    return axios.get(phoneServerUrl + '/phones');
-  }).then((response) => {
-    phones = response.data;
+  await validation.baseOrderValidation(order);
 
-    return userCtrl.getUser({body: {email: 'test@test.net'}});
-  }).then((response) => {
-    user = response;
+  let phoneResponse = await axios.get(phoneServerUrl + '/phones');
+  let phones = phoneResponse.data;
 
-    return validation.orderItemValidation(order, phones);
-  }).then(() => {
-    // maybe will need to move this functionality to phone controller and use by axios (HTTP request) like "get phone"
-    return models.phone.updateItemsCount(order);
-  }).then(() => {
-    return models.order.createOrder(order, user.id);
-  }).then((result) => {
-    logOrder(result);
+  let user = await userCtrl.getUser({body: {email: 'test@test.net'}});
 
-    return promise.resolve();
-  })
+  await validation.orderItemValidation(order, phones);
+  // maybe will need to move this functionality to phone controller and use by axios (HTTP request) like "get phone"
+  await models.phone.updateItemsCount(order);
+
+  logOrder(await models.order.createOrder(order, user.id));
+
+  return promise.resolve();
 }
 
-function list(req) {
-  let phones;
+async function list(req) {
+  let phoneResponse = await axios.get(phoneServerUrl + '/phones');
+  let phones = phoneResponse.data;
 
-  return axios.get(phoneServerUrl + '/phones').then((response) => {
-    phones = response.data;
-
-    return models.order.findAll({
-      include: [{
-        model: models.user
-      }, {
-        model: models.orderItem
-      }]
-    });
-  }).then((response) => {
-    return promise.resolve(attachPhones(response, phones));
+  let orders = await models.order.findAll({
+    include: [{
+      model: models.user
+    }, {
+      model: models.orderItem
+    }]
   });
+
+  return promise.resolve(attachPhones(orders, phones));
 }
 
 module.exports = {

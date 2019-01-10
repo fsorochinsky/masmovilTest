@@ -125,7 +125,6 @@ describe('get orders', () => {
 
   it('should return order list with user and items', () => {
     return orderCtrl.list(req).then((orders)=>{
-      console.log(phoneList)
       return expect(orders).to.deep.equal(orderList);
     })
   });
