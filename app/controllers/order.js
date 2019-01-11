@@ -33,9 +33,11 @@ async function create(req) {
   // maybe will need to move this functionality to phone controller and use by axios (HTTP request) like "get phone"
   await models.phone.updateItemsCount(order);
 
-  logOrder(await models.order.createOrder(order, user.id));
+  let createdOrder = await models.order.createOrder(order, user.id);
 
-  return promise.resolve();
+  logOrder(createdOrder);
+
+  return promise.resolve(createdOrder);
 }
 
 async function list(req) {

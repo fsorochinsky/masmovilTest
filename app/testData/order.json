@@ -163,6 +163,36 @@
       }
     }
   ],
+  "createdOrder": {
+    "id": 15,
+    "status": "success",
+    "userId": 1,
+    "totalPrice": 72,
+    "updatedAt": "2018-12-24T12:47:36.387Z",
+    "createdAt": "2018-12-24T12:47:36.387Z",
+    "orderItems": [
+      {
+        "id": 13,
+        "orderId": 15,
+        "phoneId": 1,
+        "count": 1,
+        "price": 43,
+        "totalPrice": 43,
+        "createdAt": "2018-12-24T12:47:36.397Z",
+        "updatedAt": "2018-12-24T12:47:36.397Z"
+      },
+      {
+        "id": 14,
+        "orderId": 15,
+        "phoneId": 2,
+        "count": 1,
+        "price": 29,
+        "totalPrice": 29,
+        "createdAt": "2018-12-24T12:47:36.397Z",
+        "updatedAt": "2018-12-24T12:47:36.397Z"
+      }
+    ]
+  },
   "orderList": [
     {
       "id": 20,
@@ -255,7 +285,7 @@
       ]
     }
   ],
-  "user":{
+  "user": {
     "id": 1,
     "name": "user name",
     "surName": "user surName",

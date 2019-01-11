@@ -18,7 +18,8 @@ const {
   createdOrderItemsResponse,
   orderList,
   foundOrder,
-  user
+  user,
+  createdOrder
 } = require('../testData/order');
 
 
@@ -73,8 +74,8 @@ describe('check create order', () => {
 
 
   it('should return created order with items', () => {
-    return orderCtrl.create(req).then((empty)=>{
-      return expect(empty).to.be.undefined;
+    return orderCtrl.create(req).then((createdOrderResponse)=>{
+      return expect(createdOrderResponse).to.deep.equal(createdOrder);
     })
   });
 
