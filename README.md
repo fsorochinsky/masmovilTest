@@ -32,6 +32,17 @@ links:
          "count": 0
        }
      ]
+     
+ - POST localhost:8010/updatePhoneCounts
+   - internal link only for services validated by token
+   - request:
+     
+     [
+       {
+         itemId:1,
+         count:2
+       }
+     ]
  
  - PUT localhost:8000/order
    - request:
@@ -107,3 +118,6 @@ links:
          ]
        }
      ]
+     
+@TODO move phone validation to phone service
+@TODO change error structure between services
