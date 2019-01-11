@@ -10,13 +10,24 @@ services:
     volumes:
       - /var/www/mysqlDocker:/var/lib/mysql
 
-  masmovil:
+  masmovil_order:
     depends_on:
       - "db"
-    image: masmovil/masmovil
+    image: masmovil/order
     build:
       context: .
-      dockerfile: Dockerfile
-    container_name: masmovil
+      dockerfile: orderDockerfile
+    container_name: order
     ports:
       - 8000:8000
+
+  masmovil_phone:
+    depends_on:
+    - "db"
+    image: masmovil/phone
+    build:
+      context: .
+      dockerfile: phoneDockerfile
+    container_name: phone
+    ports:
+    - 8010:8010

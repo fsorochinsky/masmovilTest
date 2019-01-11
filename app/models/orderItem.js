@@ -12,7 +12,6 @@ module.exports = (sequelize, DataTypes) => {
 
   OrderItem.associate = function (models) {
     models.orderItem.belongsTo(models.order);
-    models.orderItem.belongsTo(models.phone);
   };
 
   return OrderItem;

@@ -19,7 +19,8 @@ const {
   orderList,
   foundOrder,
   user,
-  createdOrder
+  createdOrder,
+  successResponse
 } = require('../testData/order');
 
 
@@ -30,9 +31,6 @@ describe('check create order', () => {
     const originCreateOrderFn = models.order.createOrder;
 
     stubs = [
-      sinon.stub(models.phone, 'updateItemsCount').callsFake(()=>{
-        return Promise.resolve(updatedRowsResponse);
-      }),
       sinon.stub(models.order, 'create').callsFake(()=>{
         return Promise.resolve(createdOrderResponse);
       }),
@@ -58,6 +56,11 @@ describe('check create order', () => {
     moxios.stubRequest(phoneServerUrl + '/phones', {
       status: 200,
       response: phoneList
+    });
+
+    moxios.stubRequest(phoneServerUrl + '/updatePhoneCounts', {
+      status: 200,
+      response: successResponse
     });
 
     moxios.install()

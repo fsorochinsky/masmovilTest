@@ -10,7 +10,7 @@ remove containers:
 
 
 links:
- - GET localhost:8000/phones
+ - GET localhost:8010/phones
    - request: empty
    - response: 
      

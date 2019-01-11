@@ -5,7 +5,7 @@ const config = require('./config/config.json');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
-app.use(require('./routes/order'));
+app.use(require('./routes/phone'));
 
 
 app.all('/*', function (req, res, next) {

@@ -1,5 +1,6 @@
 const models = require('../models');
 const phoneServerUrl = require('../config/config').phoneServerUrl;
+const token = require('../config/config').token;
 const axios = require('axios');
 const promise = require('bluebird');
 const validation = require('../validations/order');
@@ -30,8 +31,8 @@ async function create(req) {
   let user = await userCtrl.getUser({body: {email: 'test@test.net'}});
 
   await validation.orderItemValidation(order, phones);
-  // maybe will need to move this functionality to phone controller and use by axios (HTTP request) like "get phone"
-  await models.phone.updateItemsCount(order);
+
+  await axios.post(phoneServerUrl + '/updatePhoneCounts', {order:order, token: token});
 
   let createdOrder = await models.order.createOrder(order, user.id);
 

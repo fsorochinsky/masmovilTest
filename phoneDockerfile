@@ -1,0 +1,6 @@
+FROM node:10.11.0-alpine
+RUN apk add bash
+EXPOSE 8010
+COPY ./phoneService /phoneService
+WORKDIR /phoneService
+CMD ["bash", "scripts/start.sh" ]

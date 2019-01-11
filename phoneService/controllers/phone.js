@@ -1,4 +1,5 @@
 const models = require('../models');
+const configToken = require('../config/config').token;
 
 /**
  *
@@ -17,6 +18,19 @@ function list(req) {
   return models.phone.findAll();
 }
 
+function updateCounts(req) {
+  let {order, token} = req.body;
+
+  if(configToken !== token ){
+    return Promise.reject('wrong token');
+  }
+
+  return models.phone.updateItemsCount(order).then((data)=>{
+    return Promise.resolve('success');
+  });
+}
+
 module.exports = {
-  list: list
+  list: list,
+  updateCounts: updateCounts
 };

@@ -290,5 +290,6 @@
     "name": "user name",
     "surName": "user surName",
     "email": "test@test.net"
-  }
+  },
+  "successResponse": "success"
 }

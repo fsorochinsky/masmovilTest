@@ -1,0 +1,18 @@
+{
+  "req":{
+    "body": {
+      "order": [
+        {
+          "itemId": 1,
+          "count": 1
+        },
+        {
+          "itemId": 2,
+          "count": 1
+        }
+      ]
+    }
+  },
+  "successResponse": "success",
+  "tokenErrorResponse": "wrong token"
+}
