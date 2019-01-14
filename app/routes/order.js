@@ -1,7 +1,7 @@
 const express = require('express');
 const app = module.exports = express();
 const controller = require('../controllers/order');
-const handler = require('../helpers/routeHandlere');
+const handler = require('../helpers/routeHandler');
 
 app.put('/order', handler.handle(controller.create));
 

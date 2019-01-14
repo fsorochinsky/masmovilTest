@@ -3,7 +3,6 @@ const phoneServerUrl = require('../config/config').phoneServerUrl;
 const token = require('../config/config').token;
 const axios = require('axios');
 const promise = require('bluebird');
-const validation = require('../validations/order');
 const userCtrl = require('./user');
 
 /**
@@ -14,26 +13,23 @@ const userCtrl = require('./user');
  * order should has structure:
  * [
  *  {
- *    itemId:1,
+ *    phoneId:1,
  *    count:2
  *  }
  * ]
  *
  */
 async function create(req) {
-  let order = req.body;
-
-  await validation.baseOrderValidation(order);
-
-  let phoneResponse = await axios.get(phoneServerUrl + '/phones');
-  let phones = phoneResponse.data;
+  let orderBody = req.body;
 
   let user = await userCtrl.getUser({body: {email: 'test@test.net'}});
 
-  await validation.orderItemValidation(order, phones);
+  if(!user){
+    return promise.reject({message: "Can't find user" })
+  }
 
-  await axios.post(phoneServerUrl + '/updatePhoneCounts', {order:order, token: token});
-
+  let orderResponse = await axios.put(phoneServerUrl + '/updatePhoneCounts', {order: orderBody, token: token});
+  let order = orderResponse.data;
   let createdOrder = await models.order.createOrder(order, user.id);
 
   logOrder(createdOrder);

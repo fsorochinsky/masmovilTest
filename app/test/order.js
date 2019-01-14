@@ -20,7 +20,7 @@ const {
   foundOrder,
   user,
   createdOrder,
-  successResponse
+  orderResponse
 } = require('../testData/order');
 
 
@@ -60,7 +60,7 @@ describe('check create order', () => {
 
     moxios.stubRequest(phoneServerUrl + '/updatePhoneCounts', {
       status: 200,
-      response: successResponse
+      response: orderResponse
     });
 
     moxios.install()

@@ -2,23 +2,23 @@
   "req": {
     "body": [
       {
-        "itemId": 1,
+        "phoneId": 1,
         "count": 1
       },
       {
-        "itemId": 2,
+        "phoneId": 2,
         "count": 1
       }
     ]
   },
-  "wrongItemIdReq": {
+  "wrongphoneIdReq": {
     "body": [
       {
-        "itemId": 0,
+        "phoneId": 0,
         "count": 1
       },
       {
-        "itemId": 2,
+        "phoneId": 2,
         "count": 1
       }
     ]
@@ -26,11 +26,11 @@
   "wrongItemCountReq": {
     "body": [
       {
-        "itemId": 1,
+        "phoneId": 1,
         "count": 1
       },
       {
-        "itemId": 2,
+        "phoneId": 2,
         "count": 100
       }
     ]
@@ -103,10 +103,10 @@
       }
     ]
   },
-  "wrongItemIdErrorResponse": {
+  "wrongphoneIdErrorResponse": {
     "messages": [
       {
-        "itemId": "",
+        "phoneId": "",
         "message": "wrong item or count"
       }
     ]
@@ -114,7 +114,7 @@
   "wrongItemCountErrorResponse": {
     "messages": [
       {
-        "itemId": 2,
+        "phoneId": 2,
         "message": "wrong item count. max item count is 10"
       }
     ]
@@ -291,5 +291,10 @@
     "surName": "user surName",
     "email": "test@test.net"
   },
-  "successResponse": "success"
+  "orderResponse": {
+    "data":[
+      { "phoneId": 1, "count": 1, "price": 43 },
+      { "phoneId": 2, "count": 1, "price": 29 }
+    ]
+  }
 }

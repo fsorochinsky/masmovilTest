@@ -1,3 +1,4 @@
 .git
 app/node_modules/
+phoneService/node_modules/
 .idea

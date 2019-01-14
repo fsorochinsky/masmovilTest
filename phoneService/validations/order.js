@@ -1,22 +1,22 @@
 const promise = require('bluebird');
 
 // can be used some validation package
-function baseOrderValidation(order) {
+function baseOrderItemsValidation(order) {
   let errors = [];
 
   if (!order || !order.length) {
     return promise.reject({
       messages: [{
-        itemId: '',
+        phoneId: '',
         message: 'order is empty'
       }]
     });
   }
 
   order.forEach((orderItem) => {
-    if (!orderItem.itemId || !orderItem.count) {
+    if (!orderItem.phoneId || !orderItem.count) {
       errors.push({
-        itemId: orderItem.itemId || '',
+        phoneId: orderItem.phoneId || '',
         message: 'wrong item or count'
       });
     }
@@ -42,8 +42,6 @@ function orderItemValidation(order, phones) {
   order.forEach((orderItem) => {
     let error = isValidItem(orderItem, phoneObj);
 
-    orderItem.price = phoneObj[orderItem.itemId].price;
-
     !!error && errors.push(error);
   });
 
@@ -57,22 +55,22 @@ function orderItemValidation(order, phones) {
 }
 
 function isValidItem(orderItem, phoneObj) {
-  let phone = phoneObj[orderItem.itemId];
+  let phone = phoneObj[orderItem.phoneId];
   let error = {};
   orderItem.count = orderItem.count | 0;
 
   if (!phone) {
-    error.itemId = orderItem.itemId;
+    error.phoneId = orderItem.phoneId;
     error.message = 'wrong item';
   } else if (!orderItem.count || phone.count < orderItem.count) {
-    error.itemId = orderItem.itemId;
+    error.phoneId = orderItem.phoneId;
     error.message = 'wrong item count. max item count is ' + phone.count;
   }
 
-  return error.itemId ? error : null;
+  return error.phoneId ? error : null;
 }
 
 module.exports = {
-  baseOrderValidation: baseOrderValidation,
+  baseOrderItemsValidation: baseOrderItemsValidation,
   orderItemValidation: orderItemValidation
 };

@@ -39,7 +39,7 @@ links:
      
      [
        {
-         itemId:1,
+         phoneId:1,
          count:2
        }
      ]
@@ -49,7 +49,7 @@ links:
    
       [
        {
-         itemId:1,
+         phoneId:1,
          count:2
        }
       ]

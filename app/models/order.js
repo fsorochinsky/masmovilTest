@@ -14,6 +14,18 @@ module.exports = (sequelize, DataTypes) => {
     models.order.belongsTo(models.user);
   };
 
+  /**
+   *
+   * @param order
+   *  {
+   *    phoneId: 1,
+   *    count: 1, // item count
+   *    price: 1 // item price
+   *  }
+   * @param userId
+   * @returns {PromiseLike<T | createdOrder>}
+   *
+   */
   Order.createOrder = function (order, userId) {
     let totalPrice = order.reduce((summ, item) => {
       return summ + item.count * item.price;
@@ -26,7 +38,7 @@ module.exports = (sequelize, DataTypes) => {
       order.forEach((row) => {
         row.orderId = orderModel.id;
         row.totalPrice = row.count * row.price;
-        row.phoneId = row.itemId;
+        row.phoneId = row.phoneId;
       });
 
       return sequelize.models.orderItem.bulkCreate(order);

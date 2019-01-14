@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
           {count: sequelize.literal('count - ' + item.count)},
           {
             where: {
-              id: item.itemId,
+              id: item.phoneId,
               count: {
                 [sequelize.Op.gte]: item.count
               }
@@ -37,7 +37,7 @@ module.exports = (sequelize, DataTypes) => {
         result.forEach((updatedRows, i)=>{
           if(updatedRows[0] === 0){
             errors.push({
-              itemId: order[i].itemId,
+              phoneId: order[i].phoneId,
               message: 'wrong item count. item has been updated'
             });
           }

@@ -15,8 +15,12 @@ function handle(method) {
        *    }
        *  ]
        */
-      if (e.messages) {
-        return res.json(e.messages);
+
+      // handle custom error from service
+      let message = e.messages || e.response.data ? e.response.data : undefined;
+
+      if (message) {
+        return res.json(message);
       }
 
       return res.json('server error');
