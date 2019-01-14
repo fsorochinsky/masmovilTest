@@ -1,18 +1,107 @@
 {
-  "req":{
+  "req": {
     "body": {
       "order": [
         {
-          "itemId": 1,
+          "phoneId": 1,
           "count": 1
         },
         {
-          "itemId": 2,
+          "phoneId": 2,
           "count": 1
         }
       ]
     }
   },
-  "successResponse": "success",
-  "tokenErrorResponse": "wrong token"
+  "tokenErrorResponse": "wrong token",
+  "updatedItemsResponse": [
+    {
+      "phoneId": 1,
+      "count": 1,
+      "price": 43
+    },
+    {
+      "phoneId": 2,
+      "count": 1,
+      "price": 29
+    }
+  ],
+  "wrongItemCountReq": {
+    "body": {
+      "order": [
+        {
+          "phoneId": 1,
+          "count": 1
+        },
+        {
+          "phoneId": 2,
+          "count": 100
+        }
+      ]
+    }
+  },
+  "phoneList": [
+    {
+      "id": 1,
+      "name": "phone name 0",
+      "img": "http://someUrl.com/img/phone0.img",
+      "description": "phone description 0",
+      "price": 43,
+      "count": 6
+    },
+    {
+      "id": 2,
+      "name": "phone name 1",
+      "img": "http://someUrl.com/img/phone1.img",
+      "description": "phone description 1",
+      "price": 29,
+      "count": 10
+    },
+    {
+      "id": 3,
+      "name": "phone name 2",
+      "img": "http://someUrl.com/img/phone2.img",
+      "description": "phone description 2",
+      "price": 84,
+      "count": 9
+    },
+    {
+      "id": 4,
+      "name": "phone name 3",
+      "img": "http://someUrl.com/img/phone3.img",
+      "description": "phone description 3",
+      "price": 88,
+      "count": 6
+    }
+  ],
+  "wrongPhoneIdReq": {
+    "body": {
+      "order": [
+        {
+          "phoneId": 0,
+          "count": 1
+        },
+        {
+          "phoneId": 2,
+          "count": 1
+        }
+      ]
+    }
+  },
+  "wrongPhoneIdErrorResponse": {
+    "messages": [
+      {
+        "phoneId": "",
+        "message": "wrong item or count"
+      }
+    ]
+  },
+  "wrongItemCountErrorResponse": {
+    "messages": [
+      {
+        "phoneId": 2,
+        "message": "wrong item count. max item count is 10"
+      }
+    ]
+  }
 }
