@@ -119,5 +119,3 @@ links:
        }
      ]
      
-@TODO move phone validation to phone service
-@TODO change error structure between services
