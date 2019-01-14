@@ -291,10 +291,10 @@
     "surName": "user surName",
     "email": "test@test.net"
   },
-  "orderResponse": {
-    "data":[
+  "orderResponse": [
       { "phoneId": 1, "count": 1, "price": 43 },
       { "phoneId": 2, "count": 1, "price": 29 }
-    ]
-  }
+  ],
+  "wrongUser": null,
+  "wrongUserError":{"messages": [{"message": "Can't find user"}]}
 }

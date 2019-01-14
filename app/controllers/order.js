@@ -24,12 +24,13 @@ async function create(req) {
 
   let user = await userCtrl.getUser({body: {email: 'test@test.net'}});
 
-  if(!user){
-    return promise.reject({message: "Can't find user" })
+  if (!user) {
+    return promise.reject({messages: [{message: "Can't find user"}]})
   }
 
   let orderResponse = await axios.put(phoneServerUrl + '/updatePhoneCounts', {order: orderBody, token: token});
   let order = orderResponse.data;
+  // @TODO need to revert order items on orderCreate error;
   let createdOrder = await models.order.createOrder(order, user.id);
 
   logOrder(createdOrder);

@@ -38,7 +38,6 @@ module.exports = (sequelize, DataTypes) => {
       order.forEach((row) => {
         row.orderId = orderModel.id;
         row.totalPrice = row.count * row.price;
-        row.phoneId = row.phoneId;
       });
 
       return sequelize.models.orderItem.bulkCreate(order);
