@@ -33,7 +33,7 @@ links:
        }
      ]
      
- - POST localhost:8010/updatePhoneCounts
+ - PUT localhost:8010/updatePhoneCounts
    - internal link only for services validated by token
    - request:
      
