@@ -8,6 +8,15 @@ remove containers:
  - make down
  
 
+improvements: 
+ - move all routes description (examples) to code using apiDoc or swagger.
+ - on highload system maybe will be good to change MySQL to MongoDB or something like it or DB sharding.
+ - for validation can be used npm package (like validator) and default ORM model validation methods.
+ - for real system will be need to update DB structure and functionality fot coupons, promotions, discounts and etc.
+ - create "revert items count" functionality on phone service side by some order token when order is not created on order service side.
+ - create integration tests.
+
+
 
 links:
  - GET localhost:8010/phones
